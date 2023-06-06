@@ -1,0 +1,20 @@
+while hero.gold <= 60:
+    closestCoin = None
+    minDistance = float('inf')
+    coins = hero.findItems()
+
+    for coin in coins:
+        distance = hero.distanceTo(coin)
+        if distance < minDistance:
+            closestCoin = coin
+            minDistance = distance
+
+    if closestCoin:
+        if minDistance > 5 and hero.isReady("jump"):
+            hero.jumpTo(closestCoin.pos)
+        else:
+            hero.moveXY(closestCoin.pos.x, closestCoin.pos.y)
+
+hero.moveXY(16, 38)
+hero.buildXY("fence", 21, 38)
+hero.cast("chain-lightning", hero.findNearestEnemy())
