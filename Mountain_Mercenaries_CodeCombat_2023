@@ -1,0 +1,14 @@
+while True:
+    closestCoin = hero.findNearestItem()
+    
+    if closestCoin:
+        hero.move(closestCoin.pos)
+    
+    if hero.gold > hero.costOf("soldier"):
+        hero.summon("soldier")
+        
+    enemy = hero.findNearestEnemy()
+    for soldier in hero.findFriends():
+        hero.command(soldier, "attack", enemy)
+
+    
