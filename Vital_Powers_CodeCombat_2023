@@ -33,10 +33,10 @@ def commandSoldiers():
             if soldier.type != "decoy":
                 hero.command(soldier, "attack", enemy)
 
-# This function has your hero cast "chain-lightning" to attack the nearest enemy after the hero's health drops below 50%.
+# This function has your hero cast "chain-lightning" to attack the nearest enemy.
 def castLightning():
     enemy = hero.findNearestEnemy()
-    if enemy > 5 and enemy.type in ["munchkin", "shaman", "thrower"] and hero.canCast("chain-lightning"):
+    if enemy and enemy.type == ("munchkin", "shaman", "thrower") and hero.canCast("chain-lightning"):
         hero.cast("chain-lightning", enemy)
 
 def hiddingHero():
