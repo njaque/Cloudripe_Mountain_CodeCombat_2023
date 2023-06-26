@@ -1,0 +1,52 @@
+# This level shows how to define your own functions.
+# The code inside a function is not executed immediately. It's saved for later.
+
+# This function has your hero collect the nearest coin.
+def pickUpNearestCoin():
+    coin = hero.findNearestItem()
+    if coin and coin.value >= 1:
+        if hero.isReady("jump"):
+            hero.jumpTo(coin.pos)
+        else:
+            hero.move(coin.pos)
+
+# This function has your hero summon a soldier.
+def summonSoldier():
+    soldierCost = hero.costOf("soldier")
+    if hero.gold >= soldierCost:
+        hero.summon("soldier")
+
+# This function commands your soldiers to attack the same enemy.
+def commandSoldiers():
+    friends = hero.findFriends()
+    enemy = hero.findNearestEnemy()
+    if enemy:
+        for soldier in friends:
+            if soldier.type != "decoy":
+                hero.command(soldier, "attack", enemy)
+
+# This function has your hero cast "chain-lightning" to attack the nearest enemy after the hero's health drops below 50%.
+def castLightning():
+    if hero.health < hero.maxHealth * 1:
+        enemy = hero.findNearestEnemy()
+        if enemy and enemy.type == "munchkin" and hero.canCast("chain-lightning", enemy):
+            hero.cast("chain-lightning", enemy)
+
+
+# Build a decoy at the specified position.
+time = hero.time
+if time == 0 or time == 30:
+    for i in range(3):
+        hero.buildXY("decoy", hero.pos.x, hero.pos.y)
+
+while True:
+    # In your loop, you can "call" the functions defined above.
+    # The following line causes the code inside the "pickUpNearestCoin" function to be executed.
+    pickUpNearestCoin()
+    # Call summonSoldier here
+    summonSoldier()
+    # Call commandSoldiers here
+    commandSoldiers()
+    # Call castLightning here
+    castLightning()
+
