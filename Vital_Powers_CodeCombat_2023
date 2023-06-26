@@ -8,7 +8,7 @@ def pickUpNearestCoin():
     target_coin = None
 
     for coin in coins:
-        if coin.value > max_value:
+        if coin.value >= 2 and coin.value > max_value:
             max_value = coin.value
             target_coin = coin
 
@@ -36,18 +36,18 @@ def commandSoldiers():
 # This function has your hero cast "chain-lightning" to attack the nearest enemy after the hero's health drops below 50%.
 def castLightning():
     enemy = hero.findNearestEnemy()
-    if enemy and enemy.type == ["munchkin", "shaman", "thrower"] and hero.canCast("chain-lightning", enemy):
+    if enemy > 5 and enemy.type in ["munchkin", "shaman", "thrower"] and hero.canCast("chain-lightning"):
         hero.cast("chain-lightning", enemy)
 
-# This function builds a fire-trap if the number of enemies around the hero is greater than 20.
-def buildFireTrap():
-    enemies = hero.findEnemies()
-    if hero.maxHealth < hero.maxHealth * 0.5:
-        if len(enemies) >= 80:
-            enemy = hero.findNearestEnemy()
-            if enemy and enemy.health >= 10:
-                hero.buildXY("fire-trap", hero.pos.x, hero.pos.y)
-# Build a decoy at the specified position.
+def hiddingHero():
+    if hero.health <= hero.maxHealth * 0.75:
+        hero.buildXY("fire-trap", hero.pos.x, hero.pos.y)
+
+    if hero.canCast("invisibility"):
+        hero.cast("invisibility", hero)
+
+for i in range(1):
+    hero.buildXY("decoy", hero.pos.x, hero.pos.y)
 
 while True:
     # In your loop, you can "call" the functions defined above.
@@ -59,6 +59,5 @@ while True:
     castLightning()
     # Call commandSoldiers here
     commandSoldiers()
-    # Call buildFireTrap here
-    buildFireTrap()
-    
+    # Call hidding here
+    hiddingHero()
