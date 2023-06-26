@@ -1,0 +1,26 @@
+# Collect 80 gold
+target_coins = 80
+while hero.gold < target_coins:
+    item = hero.findNearestItem()
+    if item:
+        hero.moveXY(item.pos.x, item.pos.y)
+
+# Build 4 soldiers to use as bait
+if hero.costOf("soldier") * 4 <= hero.gold:
+    for i in range(4):
+        hero.summon("soldier")
+        
+# Send your soldiers into position
+points = []
+points.append({"x": 13, "y": 73})
+points.append({"x": 51, "y": 73})
+points.append({"x": 51, "y": 53})
+points.append({"x": 90, "y": 52})
+
+friends = hero.findFriends()
+
+# Command each friend to move to their corresponding point
+for i in range(len(friends)):
+    friend = friends[i]
+    point = points[i]
+    hero.command(friend, "move", point)
