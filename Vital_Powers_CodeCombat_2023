@@ -1,14 +1,22 @@
 # This level shows how to define your own functions.
 # The code inside a function is not executed immediately. It's saved for later.
 
-# This function has your hero collect the nearest coin.
+# This function has your hero collect the nearest coin with a value of at least 2.
 def pickUpNearestCoin():
-    coin = hero.findNearestItem()
-    if coin and coin.value >= 1:
+    coins = hero.findItems()
+    max_value = 0
+    target_coin = None
+
+    for coin in coins:
+        if coin.value > max_value:
+            max_value = coin.value
+            target_coin = coin
+
+    if target_coin:
         if hero.isReady("jump"):
-            hero.jumpTo(coin.pos)
+            hero.jumpTo(target_coin.pos)
         else:
-            hero.move(coin.pos)
+            hero.move(target_coin.pos)
 
 # This function has your hero summon a soldier.
 def summonSoldier():
@@ -27,17 +35,19 @@ def commandSoldiers():
 
 # This function has your hero cast "chain-lightning" to attack the nearest enemy after the hero's health drops below 50%.
 def castLightning():
-    if hero.health < hero.maxHealth * 1:
-        enemy = hero.findNearestEnemy()
-        if enemy and enemy.type == "munchkin" and hero.canCast("chain-lightning", enemy):
-            hero.cast("chain-lightning", enemy)
+    enemy = hero.findNearestEnemy()
+    if enemy and enemy.type == ["munchkin", "shaman", "thrower"] and hero.canCast("chain-lightning", enemy):
+        hero.cast("chain-lightning", enemy)
 
-
+# This function builds a fire-trap if the number of enemies around the hero is greater than 20.
+def buildFireTrap():
+    enemies = hero.findEnemies()
+    if hero.maxHealth < hero.maxHealth * 0.5:
+        if len(enemies) >= 80:
+            enemy = hero.findNearestEnemy()
+            if enemy and enemy.health >= 10:
+                hero.buildXY("fire-trap", hero.pos.x, hero.pos.y)
 # Build a decoy at the specified position.
-time = hero.time
-if time == 0 or time == 30:
-    for i in range(3):
-        hero.buildXY("decoy", hero.pos.x, hero.pos.y)
 
 while True:
     # In your loop, you can "call" the functions defined above.
@@ -45,8 +55,10 @@ while True:
     pickUpNearestCoin()
     # Call summonSoldier here
     summonSoldier()
-    # Call commandSoldiers here
-    commandSoldiers()
     # Call castLightning here
     castLightning()
-
+    # Call commandSoldiers here
+    commandSoldiers()
+    # Call buildFireTrap here
+    buildFireTrap()
+    
